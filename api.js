@@ -15,17 +15,6 @@ export const fetchChicagoArtworkById = async (id) => {
 };
 
 
-export const fetchRijksArtworks = async (filters) => {
-  const response = await axios.get(`${BASE_URL}/RijksMuseum`, { params: filters });
-  return response.data.rijksArtWorks || [];
-};
-
-
-export const fetchRijksArtworkById = async (id) => {
-  const response = await axios.get(`${BASE_URL}/RijksMuseum/${id}`);
-  return response.data;
-};
-
 
 export const fetchMetArtworks = async (filters) => {
   const response = await axios.get(`${BASE_URL}/MetArtMuseum`, { params: filters });

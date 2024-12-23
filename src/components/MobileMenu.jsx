@@ -13,7 +13,7 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
 
   const handleExploreClick = (path) => {
     navigate(path);
-    setMobileMenuClicked(false); // Close the menu after navigation
+    setMobileMenuClicked(false); 
   };
 
   return (
@@ -21,14 +21,14 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
       className="bg-blue-100 shadow-lg p-6 fixed bottom-0 left-0 w-full h-[70vh] 
                  transform translate-y-0 transition-transform duration-2000 ease-in border-t-4 border-blue-100"
     >
-      {/* Close Button */}
+ 
       <section>
         <button onClick={handleClick} className="text-black text-lg font-bold">
           <IoIosCloseCircleOutline className="text-4xl" />
         </button>
       </section>
 
-      {/* Menu Links */}
+ 
       <section className="flex flex-col items-left justify-center space-y-4 mt-10">
         <a
           href="#"
@@ -38,7 +38,7 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
           Home
         </a>
 
-        {/* Explore Artworks Dropdown */}
+     
         <div className="relative">
           <button
             onClick={() => setIsDropdownOpen((prev) => !prev)}
