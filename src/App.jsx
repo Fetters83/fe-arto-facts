@@ -4,6 +4,8 @@ import HomePage from "./components/HomePage";
 import { artCollectionContext } from "./contexts/artCollectionContext";
 import { useState } from "react";
 import ArtCollections from "./components/ArtCollections";
+import ArtWorks from "./components/ArtWorks";
+import SingleArtWork from "./components/SingleArtWork";
 
 function App() {
 
@@ -15,7 +17,8 @@ return(
  <Nav/>
   <Routes>
     <Route path="/" element={<HomePage/>}></Route>
-    <Route path="/collections" element={<ArtCollections/>}></Route>
+    <Route path="/collections" element={<ArtWorks/>}></Route>
+    <Route path="/collections/:id" element={<SingleArtWork />} />
   </Routes>
  </artCollectionContext.Provider>
 
