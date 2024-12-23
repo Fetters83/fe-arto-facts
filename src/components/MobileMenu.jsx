@@ -1,9 +1,5 @@
-
-
-
 import React, { useState } from 'react';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +30,11 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
 
       {/* Menu Links */}
       <section className="flex flex-col items-left justify-center space-y-4 mt-10">
-        <a href="#" className="text-black font-normal hover:font-bold" onClick={() => handleExploreClick('/')}>
+        <a
+          href="#"
+          className="text-black font-normal hover:font-bold"
+          onClick={() => handleExploreClick('/')}
+        >
           Home
         </a>
 
@@ -73,13 +73,25 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
           )}
         </div>
 
-        <a href="#" className="text-black font-normal hover:font-bold" onClick={() => handleExploreClick('/exhibitions')}>
+        <a
+          href="#"
+          className="text-black font-normal hover:font-bold"
+          onClick={() => handleExploreClick('/exhibitions')}
+        >
           My Exhibitions
         </a>
-        <a href="#" className="text-black font-normal hover:font-bold" onClick={() => handleExploreClick('/login')}>
+        <a
+          href="#"
+          className="text-black font-normal hover:font-bold"
+          onClick={() => handleExploreClick('/login')}
+        >
           Login
         </a>
-        <a href="#" className="text-black font-normal hover:font-bold" onClick={() => handleExploreClick('/signup')}>
+        <a
+          href="#"
+          className="text-black font-normal hover:font-bold"
+          onClick={() => handleExploreClick('/signup')}
+        >
           Sign Up
         </a>
       </section>
