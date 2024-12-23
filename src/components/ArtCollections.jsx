@@ -1,67 +1,59 @@
-import { useContext,useEffect, useState } from "react";
-import fetchMetArtWork from "../../api";
-import { artCollectionContext } from '../contexts/artCollectionContext';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const ArtCollections = () => {
-  const [artArray, setArtArray] = useState([]);
-  const [loading, setloading] = useState(true);
-  const {artCollection} = useContext(artCollectionContext)
-  let data = [];
 
+
+function ArtCollections() {
+  const [collections, setCollections] = useState([]);
+  const [filters, setFilters] = useState({ search: '', department: '' });
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!artCollection) return; 
-    const getArtWork = async () => {
-      if(artCollection==='metCollection'){
-         data = await fetchMetArtWork();
-      }  
-     
-      setArtArray(data);
-      setloading(false);
-    };
-    getArtWork();
-  }, [artCollection]);
+    async function fetchCollections() {
+      const response = await axios.get('/api/art-collections/public', { params: filters });
+      setCollections(response.data);
+    }
+    fetchCollections();
+  }, [filters]);
 
   return (
-    !loading && (
-      <section className="font-body">
-        <section className="grid m-4">
-          <section className="grid cols 1">
-            {artArray.map((art) => {
-              console.log(art);
-              return (
-                <ul className="bg-white rounded overflow-hidden shadow m-4 p-4 border solid border-grey:1000">
-                  <li>
-                    <img
-                      src={art.smallImg}
-                      alt={`picture of ${art.alt}`}
-                      className="float-right"
-                    />
-                    <h2 className="p-2">
-                      <span className="font-bold">Title: </span>
-                      {art.title}
-                    </h2>
-                    <p className="p-2">
-                      <span className="font-bold">Artist: </span>
-                      {art.artist}
-                    </p>
-                    <p className="p-2">
-                      <span className="font-bold">Date: </span>
-                      {art.date}
-                    </p>
-                    <p className="p-2">
-                      <span className="font-bold">Department:</span>
-                      {art.department}
-                    </p>
-                  </li>
-                </ul>
-              );
-            })}
-          </section>
-        </section>
-      </section>
-    )
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Explore Art Collections</h1>
+
+      <div className="flex space-x-4 mb-4">
+        <input
+          type="text"
+          placeholder="Search collections..."
+          value={filters.search}
+          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          className="border px-3 py-2 rounded w-full"
+        />
+        <select
+          value={filters.department}
+          onChange={(e) => setFilters({ ...filters, department: e.target.value })}
+          className="border px-3 py-2 rounded"
+        >
+          <option value="">All Departments</option>
+          <option value="Painting">Painting</option>
+          <option value="Sculpture">Sculpture</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {collections.map((collection) => (
+          <div
+            key={collection.id}
+            className="border rounded shadow hover:shadow-lg transition p-4"
+            onClick={() => navigate(`/collections/${collection.id}`)}
+          >
+            <img src={collection.thumbnail} alt={collection.title} className="w-full h-48 object-cover mb-2" />
+            <h2 className="text-lg font-semibold">{collection.title}</h2>
+          </div>
+        ))}
+      </div>
+    </div>
   );
-};
+}
 
 export default ArtCollections;
