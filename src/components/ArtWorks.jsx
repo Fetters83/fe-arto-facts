@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const ArtWorks = () => {
   const [artworks, setArtworks] = useState([]);
@@ -10,11 +10,11 @@ const ArtWorks = () => {
     offset: 0,
     departmentId: 1,
     type: '',
-    searchTerm: '',
+    searchTerm: 'Painting',
   });
 
+  const navigate = useNavigate(); // Initialize navigate
 
-  const navigate = useNavigate();
   // Fetch department options for the dropdown
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -118,7 +118,11 @@ const ArtWorks = () => {
       {/* Artworks Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {artworks.map((artwork) => (
-          <div key={artwork.id} className="border rounded shadow p-4" onClick={() => navigate(`/collections/${artwork.id}`)} >
+          <div
+            key={artwork.id}
+            className="border rounded shadow p-4 cursor-pointer"
+            onClick={() => navigate(`/collections/${artwork.id}`)} // Navigate to SingleArtWork
+          >
             <img
               src={artwork.smallImg}
               alt={artwork.alt}
