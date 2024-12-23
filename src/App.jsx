@@ -6,6 +6,8 @@ import { useState } from "react";
 import ArtCollections from "./components/ArtCollections";
 import ArtWorks from "./components/ArtWorks";
 import SingleArtWork from "./components/SingleArtWork";
+import RijksArtWorks from "./components/RijksArtWorks";
+import RijksSingleArtPiece from "./components/RijksSingleArtPiece";
 
 function App() {
 
@@ -17,8 +19,10 @@ return(
  <Nav/>
   <Routes>
     <Route path="/" element={<HomePage/>}></Route>
-    <Route path="/collections" element={<ArtWorks/>}></Route>
+    <Route path="/collections/metCollection" element={<ArtWorks/>}></Route>
     <Route path="/collections/:id" element={<SingleArtWork />} />
+    <Route path="/collections/rijksCollection" element={<RijksArtWorks />} />
+    <Route path="/collections/rijksCollection/:id" element={<RijksSingleArtPiece />} />
   </Routes>
  </artCollectionContext.Provider>
 
