@@ -56,13 +56,7 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
                 >
                   Metropolitan Museum of Art NY
                 </button>
-                <button
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-bold w-full text-left"
-                  onClick={() => handleExploreClick('/collections/rijksCollection')}
-                >
-                  Rijks Museum Amsterdam
-                </button>
-                <button
+                   <button
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:font-bold w-full text-left"
                   onClick={() => handleExploreClick('/collections/chicagoCollection')}
                 >

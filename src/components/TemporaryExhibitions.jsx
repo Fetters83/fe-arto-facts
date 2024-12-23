@@ -9,9 +9,7 @@ const TemporaryExhibitions = () => {
   const handleArtworkClick = (artwork) => {
     if (artwork.collectionType === 'MetArtMuseum') {
       navigate(`/collections/metCollection/${artwork.id}`);
-    } else if (artwork.collectionType === 'RijksMuseum') {
-      navigate(`/collections/rijksCollection/${artwork.id}`);
-    } else if (artwork.collectionType === 'ArtInstituteChicago') {
+    }  else if (artwork.collectionType === 'ArtInstituteChicago') {
       navigate(`/collections/chicagoCollection/${artwork.id}`);
     } else {
       console.error('Unknown collection type for artwork:', artwork);
