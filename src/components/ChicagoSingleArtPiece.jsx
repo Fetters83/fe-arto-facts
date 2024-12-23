@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useArtContext } from '../contexts/ArtworkContext.jsx';
 
-const RijksSingleArtPiece = () => {
+import { useArtContext } from '../contexts/ArtworkContext.jsx';
+import { fetchChicagoArtworkById } from '../../api.js';
+const ChicagoSingleArtPiece = () => {
   const { id } = useParams(); 
   const navigate = useNavigate();
   const [artwork, setArtwork] = useState(null);
@@ -13,32 +13,39 @@ const RijksSingleArtPiece = () => {
   const [newExhibitionName, setNewExhibitionName] = useState('');
 
   useEffect(() => {
-    const fetchArtwork = async () => {
+    const loadArtwork = async () => {
       try {
-        const response = await axios.get(
-          `https://be-arto-facts.onrender.com/api/collections/RijksMuseum/${id}`
-        );
-        setArtwork(response.data);
+        const data = await fetchChicagoArtworkById(id);
+        setArtwork(data);
       } catch (err) {
-        setError('Could not fetch the artwork details.');
         console.error(err);
+        setError('Could not fetch the artwork details.');
       }
     };
-
-    fetchArtwork();
+    loadArtwork();
   }, [id]);
+ 
 
   const handleSaveArtwork = () => {
+  
+    const artworkWithCollectionType = {
+      ...artwork,
+      collectionType: 'ArtInstituteChicago', 
+    };
+  
     if (selectedExhibitionId) {
-      addArtworkToExhibition(selectedExhibitionId, artwork);
+
+      addArtworkToExhibition(selectedExhibitionId, artworkWithCollectionType);
       alert(`Artwork saved to the exhibition!`);
-    } else if (newExhibitionName) {
+    } else if (newExhibitionName.trim()) {
+    
       const newId = Date.now();
       createExhibition(newExhibitionName);
-      addArtworkToExhibition(newId, artwork);
-      alert(`Artwork saved to new exhibition "${newExhibitionName}"!`);
-      setNewExhibitionName('');
-    } else {
+      setTimeout(() => {
+        addArtworkToExhibition(newId, artworkWithCollectionType); 
+        alert(`Artwork saved to new exhibition "${newExhibitionName}"!`);
+        setNewExhibitionName('');
+      }, 0);
       alert('Please select or create an exhibition.');
     }
   };
@@ -53,15 +60,18 @@ const RijksSingleArtPiece = () => {
 
   return (
     <div className="p-6">
+    
       <button
         onClick={() => navigate(-1)} 
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4"
       >
         Back
       </button>
+
+     
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <img
-          src={artwork.img}
+          src={artwork.img || artwork.smallImg}
           alt={artwork.alt}
           className="w-full h-auto object-cover rounded shadow"
         />
@@ -80,13 +90,17 @@ const RijksSingleArtPiece = () => {
             <strong>Classification:</strong> {artwork.classification}
           </p>
           <p className="text-gray-600">
-            <strong>Department:</strong> {artwork.department.join(', ')}
+            <strong>Department:</strong> {artwork.department}
           </p>
           <p className="text-gray-600">
             <strong>Country:</strong> {artwork.country}
           </p>
           <p className="text-gray-600">
             <strong>Credited to:</strong> {artwork.creditedTo}
+          </p>
+          <p className="text-gray-600">
+            <strong>Description:</strong>{' '}
+            {artwork.description || 'No description available'}
           </p>
 
           <div className="mt-6">
@@ -104,7 +118,7 @@ const RijksSingleArtPiece = () => {
               ))}
             </select>
 
-          
+           
             <input
               type="text"
               placeholder="Or create a new exhibition"
@@ -126,4 +140,4 @@ const RijksSingleArtPiece = () => {
   );
 };
 
-export default RijksSingleArtPiece;
+export default ChicagoSingleArtPiece;

@@ -1,41 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useArtContext } from '../contexts/ArtworkContext.jsx';
+import { fetchMetArtworkById } from '../../api.js';
 
-const RijksSingleArtPiece = () => {
+const MetSingleArtWork = () => {
   const { id } = useParams(); 
   const navigate = useNavigate();
   const [artwork, setArtwork] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const { exhibitions, addArtworkToExhibition, createExhibition } = useArtContext();
   const [selectedExhibitionId, setSelectedExhibitionId] = useState('');
   const [newExhibitionName, setNewExhibitionName] = useState('');
 
   useEffect(() => {
-    const fetchArtwork = async () => {
+    const loadArtwork = async () => {
       try {
-        const response = await axios.get(
-          `https://be-arto-facts.onrender.com/api/collections/RijksMuseum/${id}`
-        );
-        setArtwork(response.data);
+        const data = await fetchMetArtworkById(id); 
+        setArtwork(data); 
       } catch (err) {
+        console.error('Error fetching artwork:', err.message);
         setError('Could not fetch the artwork details.');
-        console.error(err);
       }
     };
-
-    fetchArtwork();
+    loadArtwork();
   }, [id]);
 
+
+
+  if (error) {
+    return <div className="p-6 text-red-600">{error}</div>;
+  }
+
+  if (!artwork) {
+    return <div className="p-6 text-gray-600">Loading artwork details...</div>;
+  }
+
   const handleSaveArtwork = () => {
+    const artworkWithCollectionType = {
+      ...artwork,
+      collectionType: 'MetArtMuseum',
+    };
+  
     if (selectedExhibitionId) {
-      addArtworkToExhibition(selectedExhibitionId, artwork);
+      addArtworkToExhibition(selectedExhibitionId, artworkWithCollectionType);
       alert(`Artwork saved to the exhibition!`);
     } else if (newExhibitionName) {
       const newId = Date.now();
       createExhibition(newExhibitionName);
-      addArtworkToExhibition(newId, artwork);
+      addArtworkToExhibition(newId, artworkWithCollectionType);
       alert(`Artwork saved to new exhibition "${newExhibitionName}"!`);
       setNewExhibitionName('');
     } else {
@@ -43,53 +56,50 @@ const RijksSingleArtPiece = () => {
     }
   };
 
-  if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
-  }
-
-  if (!artwork) {
-    return <div className="p-6 text-center">Loading...</div>;
-  }
-
   return (
     <div className="p-6">
+ 
       <button
-        onClick={() => navigate(-1)} 
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4"
+        onClick={() => navigate(-1)}
+        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 mb-4"
       >
         Back
       </button>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+     
+      <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-6">
         <img
-          src={artwork.img}
+          src={artwork.img || artwork.smallImg}
           alt={artwork.alt}
-          className="w-full h-auto object-cover rounded shadow"
+          className="w-full md:w-1/2 object-cover mb-4 md:mb-0"
         />
-        <div>
-          <h1 className="text-2xl font-bold mb-4">{artwork.title}</h1>
-          <p className="text-gray-600">
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold mb-4">{artwork.title}</h1>
+          <p className="text-gray-700 mb-2">
             <strong>Artist:</strong> {artwork.artist}
           </p>
-          <p className="text-gray-600">
-            <strong>Date:</strong> {artwork.date}
-          </p>
-          <p className="text-gray-600">
-            <strong>Medium:</strong> {artwork.medium.join(', ')}
-          </p>
-          <p className="text-gray-600">
+          <p className="text-gray-700 mb-2">
             <strong>Classification:</strong> {artwork.classification}
           </p>
-          <p className="text-gray-600">
-            <strong>Department:</strong> {artwork.department.join(', ')}
+          <p className="text-gray-700 mb-2">
+            <strong>Medium:</strong> {artwork.medium}
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-700 mb-2">
+            <strong>Date:</strong> {artwork.date}
+          </p>
+          <p className="text-gray-700 mb-2">
+            <strong>Department:</strong> {artwork.department}
+          </p>
+          <p className="text-gray-700 mb-2">
             <strong>Country:</strong> {artwork.country}
           </p>
-          <p className="text-gray-600">
-            <strong>Credited to:</strong> {artwork.creditedTo}
+          <p className="text-gray-700 mb-2">
+            <strong>Credited To:</strong> {artwork.creditedTo}
           </p>
+        </div>
+      </div>
 
-          <div className="mt-6">
+      <div className="mt-6">
            
             <select
               value={selectedExhibitionId}
@@ -104,7 +114,7 @@ const RijksSingleArtPiece = () => {
               ))}
             </select>
 
-          
+      
             <input
               type="text"
               placeholder="Or create a new exhibition"
@@ -120,10 +130,8 @@ const RijksSingleArtPiece = () => {
               Save to Exhibition
             </button>
           </div>
-        </div>
-      </div>
     </div>
   );
 };
 
-export default RijksSingleArtPiece;
+export default MetSingleArtWork;
