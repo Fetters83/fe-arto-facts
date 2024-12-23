@@ -23,7 +23,6 @@ const Nav = () => {
         <section className="ssm:hidden lg:block space-x-6 text-1xl">
           <a href="/" className="text-black font-normal hover:font-bold">Home</a>
           <ExploreArtworksDDDT />
-          <a href="/create-exhibition" className="text-black font-normal hover:font-bold">Create Exhibition</a>
           <a href="/exhibitions" className="text-black font-normal hover:font-bold">Temporary Exhibitions</a>
         </section>
       </section>
