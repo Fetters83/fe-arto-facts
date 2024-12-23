@@ -1,3 +1,3 @@
-# React + Vite
+# fe-arto-facts
 
 
