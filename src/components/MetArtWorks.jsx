@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const ArtWorks = () => {
+import { useNavigate } from 'react-router-dom'; 
+import { fetchMetDepartments, fetchMetArtworks } from '../../api';
+
+const MetArtWorks = () => {
   const [artworks, setArtworks] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [filters, setFilters] = useState({
@@ -13,45 +14,39 @@ const ArtWorks = () => {
     searchTerm: 'Painting',
   });
 
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
-  // Fetch department options for the dropdown
   useEffect(() => {
-    const fetchDepartments = async () => {
+    const loadDepartments = async () => {
       try {
-        const response = await axios.get(
-          'https://be-arto-facts.onrender.com/api/collections/MetArtMuseum/departments'
-        );
-        setDepartments(response.data.departments);
+        const data = await fetchMetDepartments(); 
+        setDepartments(data);
       } catch (error) {
         console.error('Error fetching departments:', error);
       }
     };
-    fetchDepartments();
+    loadDepartments();
   }, []);
 
-  // Fetch artworks based on filters
+ 
   useEffect(() => {
-    const fetchArtworks = async () => {
+    const loadArtworks = async () => {
       try {
-        const response = await axios.get(
-          'https://be-arto-facts.onrender.com/api/collections/MetArtMuseum',
-          { params: filters }
-        );
-        setArtworks(response.data.metArtWorks);
+        const data = await fetchMetArtworks(filters); 
+        setArtworks(data);
       } catch (error) {
         console.error('Error fetching artworks:', error);
       }
     };
-    fetchArtworks();
+    loadArtworks();
   }, [filters]);
 
-  // Handle filter changes
+
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Handle pagination
+ 
   const handlePagination = (direction) => {
     setFilters((prev) => ({
       ...prev,
@@ -63,7 +58,7 @@ const ArtWorks = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 text-center">Explore Artworks</h1>
 
-      {/* Filters */}
+    
       <div className="flex flex-wrap gap-4 mb-6 items-center justify-center">
         <select
           value={filters.limit}
@@ -115,13 +110,13 @@ const ArtWorks = () => {
         </button>
       </div>
 
-      {/* Artworks Grid */}
+  
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {artworks.map((artwork) => (
           <div
             key={artwork.id}
             className="border rounded shadow p-4 cursor-pointer"
-            onClick={() => navigate(`/collections/${artwork.id}`)} // Navigate to SingleArtWork
+            onClick={() => navigate(`/collections/metCollection/${artwork.id}`)} // Navigate to SingleArtWork
           >
             <img
               src={artwork.smallImg}
@@ -134,7 +129,7 @@ const ArtWorks = () => {
         ))}
       </div>
 
-      {/* Pagination */}
+   
       <div className="flex flex-col md:flex-row justify-between mt-6 space-y-4 md:space-y-0">
         <button
           onClick={() => handlePagination('prev')}
@@ -156,4 +151,4 @@ const ArtWorks = () => {
   );
 };
 
-export default ArtWorks;
+export default MetArtWorks;

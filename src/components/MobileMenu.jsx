@@ -78,22 +78,9 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
           className="text-black font-normal hover:font-bold"
           onClick={() => handleExploreClick('/exhibitions')}
         >
-          My Exhibitions
+          Temporary Exhibitions
         </a>
-        <a
-          href="#"
-          className="text-black font-normal hover:font-bold"
-          onClick={() => handleExploreClick('/login')}
-        >
-          Login
-        </a>
-        <a
-          href="#"
-          className="text-black font-normal hover:font-bold"
-          onClick={() => handleExploreClick('/signup')}
-        >
-          Sign Up
-        </a>
+
       </section>
     </section>
   );

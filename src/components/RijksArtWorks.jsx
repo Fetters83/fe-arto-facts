@@ -14,7 +14,7 @@ const RijksArtWorks = () => {
 
   const navigate = useNavigate();
 
-  // Fetch artworks based on filters
+
   useEffect(() => {
     const fetchArtworks = async () => {
       try {
@@ -30,12 +30,12 @@ const RijksArtWorks = () => {
     fetchArtworks();
   }, [filters]);
 
-  // Handle filter changes
+
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Handle pagination
+
   const handlePagination = (direction) => {
     setFilters((prev) => ({
       ...prev,
@@ -47,7 +47,7 @@ const RijksArtWorks = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4 text-center">Explore Rijks Museum Artworks</h1>
 
-      {/* Filters */}
+  
       <div className="flex flex-wrap gap-4 mb-6 items-center justify-center">
         <select
           value={filters.ps}
@@ -97,7 +97,7 @@ const RijksArtWorks = () => {
         </button>
       </div>
 
-      {/* Artworks Grid */}
+  
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {artworks.map((artwork) => (
           <div
@@ -116,7 +116,7 @@ const RijksArtWorks = () => {
         ))}
       </div>
 
-      {/* Pagination */}
+  
       <div className="flex flex-col md:flex-row justify-between mt-6 space-y-4 md:space-y-0">
         <button
           onClick={() => handlePagination('prev')}
