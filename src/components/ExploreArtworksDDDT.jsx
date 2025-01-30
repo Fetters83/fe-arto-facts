@@ -43,6 +43,14 @@ const ExploreArtworksDDDT = () => {
               Art Institute of Chicago
             </a>
           </MenuItem>
+          <MenuItem>
+            <a
+              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+              onClick={() => handleClick('/collections/clevelandCollection')}
+            >
+              Cleveland Art Museum
+            </a>
+          </MenuItem>
         </div>
       </MenuItems>
     </Menu>
