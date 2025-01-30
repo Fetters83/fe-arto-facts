@@ -75,7 +75,7 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
         >
           Temporary Exhibitions
         </a> */}
-        <Link to={'/exhibitions'} className="text-black font-normal hover:font-bold" >Temporary Exhibitions</Link>
+        <Link to={'/exhibitions'} className="text-black font-normal hover:font-bold" onClick={handleClick}>Temporary Exhibitions</Link>
 
       </section>
     </section>

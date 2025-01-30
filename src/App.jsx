@@ -16,6 +16,7 @@ import MetSingleArtWork from "./components/MetSingleArtWork";
 import Test from "./components/test";
 import MetArtWorks2 from "./components/MetArtWorks2";
 import ClevelandArtWorks from "./components/ClevelandArtWorks";
+import ClevelandSingleArtWork from "./components/ClevelandComponents/ClevelandSingleArtwork";
 
 function App() {
 
@@ -35,6 +36,7 @@ return(
      <Route path="/collections/chicagoCollection" element={<ChicagoArtWorks />} />
     <Route path="/collections/chicagoCollection/:id" element={<ChicagoSingleArtPiece />} />
     <Route path="/collections/clevelandCollection" element={<ClevelandArtWorks/>} />
+    <Route path="/collections/clevelandCollection/:id" element={<ClevelandSingleArtWork/>} />
     <Route path="/create-exhibition" element={<CreateExhibition />} />
     <Route path="/exhibitions" element={<TemporaryExhibitions />} />
   </Routes>

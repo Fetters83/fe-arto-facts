@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ScaleLoader from "react-spinners/ClipLoader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { fetchClevelandArtworks } from "../../api";
 import ClevelandDepartmentsDD from "./ClevelandComponents/ClevelandDepartmentsDD";
 import ClevelandArtTypes from "./ClevelandComponents/ClevelandArtTypesDD";
@@ -29,15 +29,19 @@ const ClevelandArtWorks = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentItems, setCurrentItems] = useState([]);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
-  const [itemOffset, setItemOffset] = useState(0);
-  const [selectedPage, setSelectedPage] = useState(0);
+
+  const location = useLocation();
+  const [itemsPerPage, setItemsPerPage] = useState(location.state?.itemsPerPage || 12);
+  const [itemOffset, setItemOffset] = useState(location.state?.itemOffset || 0);
+  const [selectedPage, setSelectedPage] = useState(location.state?.selectedPage || 0);
   const [filtersActive, setFiltersActive] = useState(false)
 
   const navigate = useNavigate();
 
 
+
 console.log(filters)
+console.log(selectedPage)
   // Fetch Artworks when Filters Change
   useEffect(() => {
     const fetchArtworks = async () => {
@@ -220,8 +224,9 @@ console.log(filters)
                 <section
                   key={item.id}
                   className="border border-solid rounded shadow p-4 cursor-pointer flex flex-col"
+               
                   onClick={() =>
-                    navigate(`/collections/metCollection/${item.id}`)
+                    navigate(`/collections/clevelandCollection/${item.id}`,{state:{selectedPage,itemOffset,itemsPerPage}})
                   }
                 >
                   <section className="flex items-center justify-center bg-gray-50 border-solid hover:bg-gray-100 shadow h-full max-h-96">

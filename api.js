@@ -67,6 +67,19 @@ export const fetchClevelandArtworks = async(params) =>{
     console.log(error)
     throw error
   }
+
+  
 }
 
+export const fetchClevelandArtworkById = async (id)=>{
+  
+  try {
+    const response = await axios.get(`${BASE_URL}/ClevelandArtMuseum/${id}`)
+    const {clevelandArtPiece} = response.data
+    return clevelandArtPiece
+  } catch (error) {
+    throw error
+  }
 
+
+}
