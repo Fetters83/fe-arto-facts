@@ -2,6 +2,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { useEffect, useState } from "react";
 import MobileMenu from "./MobileMenu";
 import ExploreArtworksDDDT from "./ExploreArtworksDDDT";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   const [mobileMenuClicked, setMobileMenuClicked] = useState(false);
@@ -23,7 +24,8 @@ const Nav = () => {
         <section className="ssm:hidden lg:block space-x-6 text-1xl">
           <a href="/" className="text-black font-normal hover:font-bold">Home</a>
           <ExploreArtworksDDDT />
-          <a href="/exhibitions" className="text-black font-normal hover:font-bold">Temporary Exhibitions</a>
+       {/*    <a href="/exhibitions" className="text-black font-normal hover:font-bold">Temporary Exhibitions</a> */}
+          <Link to={'/exhibitions'} className="text-black font-normal hover:font-bold" >Temporary Exhibitions</Link>
         </section>
       </section>
     </section>
