@@ -1,15 +1,15 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useContext } from 'react';
-import { artCollectionContext } from '../contexts/artCollectionContext';
+/* import { useContext } from 'react';
+import { artCollectionContext } from '../contexts/artCollectionContext'; */
 import { useNavigate } from 'react-router-dom';
 
 const ExploreArtworksDDDT = () => {
-  const { setArtCollection } = useContext(artCollectionContext);
+/*   const { setArtCollection } = useContext(artCollectionContext); */
   const navigate = useNavigate();
 
   const handleClick = (collection) => {
-    setArtCollection(collection);
+   /*  setArtCollection(collection); */
     navigate(collection); // Navigate to the appropriate route
   };
 

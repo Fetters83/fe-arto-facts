@@ -23,7 +23,7 @@ const [artCollection,setArtCollection] = useState()
  
 return(
   <>
- <artCollectionContext.Provider value={{artCollection,setArtCollection}}>
+{/*  <artCollectionContext.Provider value={{artCollection,setArtCollection}}> */}
  <section className="font-body">
  <Nav/>
   <Routes>
@@ -41,7 +41,7 @@ return(
  </section>
 
  
- </artCollectionContext.Provider>
+{/*  </artCollectionContext.Provider> */}
 
   </>
 )
