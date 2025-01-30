@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const MobileMenu = ({ setMobileMenuClicked }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -67,13 +68,14 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
           )}
         </div>
 
-        <a
+       {/*  <a
           href="#"
           className="text-black font-normal hover:font-bold"
           onClick={() => handleExploreClick('/exhibitions')}
         >
           Temporary Exhibitions
-        </a>
+        </a> */}
+        <Link to={'/exhibitions'} className="text-black font-normal hover:font-bold" >Temporary Exhibitions</Link>
 
       </section>
     </section>
