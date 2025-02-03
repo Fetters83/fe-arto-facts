@@ -22,7 +22,7 @@ const Nav = () => {
         </section>
         {mobileMenuClicked && <MobileMenu setMobileMenuClicked={setMobileMenuClicked} />}
         <section className="ssm:hidden lg:block space-x-6 text-1xl">
-          <Link to={'/'}c lassName="text-black font-normal hover:font-bold">Home</Link>
+          <Link to={'/'}className="text-black font-normal hover:font-bold">Home</Link>
           <ExploreArtworksDDDT />
           <Link to={'/exhibitions'} className="text-black font-normal hover:font-bold" >Temporary Exhibitions</Link>
         </section>

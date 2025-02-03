@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
+
 import { useArtContext } from "../contexts/ArtworkContext.jsx";
 import { fetchChicagoArtworkById } from "../../api.js";
 import DOMPurify from 'dompurify';
@@ -31,7 +32,7 @@ const ChicagoSingleArtPiece = () => {
     loadArtwork();
   }, [id]);
 
-  console.log(location.state);
+
   const handleSaveArtwork = () => {
     const artworkWithCollectionType = {
       ...artwork,
@@ -81,12 +82,6 @@ const ChicagoSingleArtPiece = () => {
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {!imageError ? (
-         /*  <img
-            src={artwork.img || artwork.smallImg}
-            alt={artwork.alt}
-            className="w-full h-auto object-cover rounded shadow"
-            onError={() => setImageError(true)}
-          /> */
           <LazyLoadImage
           alt={artwork.alt}
           src={artwork.img || artwork.smallIng}
