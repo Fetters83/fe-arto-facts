@@ -17,11 +17,13 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
     setMobileMenuClicked(false);
   };
 
-  // ✅ Disable scrolling when menu is open
+
   useEffect(() => {
-    document.body.style.overflow = "hidden"; // Disable scroll
+    // Disable scroll
+    document.body.style.overflow = "hidden"; 
     return () => {
-      document.body.style.overflow = "auto"; // Re-enable scroll when menu closes
+      // Re-enable scroll when menu closes
+      document.body.style.overflow = "auto"; 
     };
   }, []);
 
@@ -44,7 +46,7 @@ const MobileMenu = ({ setMobileMenuClicked }) => {
         >
           Home
         </a>
-
+        
         <section className="relative">
           <button
             onClick={() => setIsDropdownOpen((prev) => !prev)}
