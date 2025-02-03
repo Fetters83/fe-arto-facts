@@ -1,15 +1,11 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-/* import { useContext } from 'react';
-import { artCollectionContext } from '../contexts/artCollectionContext'; */
 import { useNavigate } from 'react-router-dom';
 
 const ExploreArtworksDDDT = () => {
-/*   const { setArtCollection } = useContext(artCollectionContext); */
   const navigate = useNavigate();
 
   const handleClick = (collection) => {
-   /*  setArtCollection(collection); */
     navigate(collection); // Navigate to the appropriate route
   };
 
@@ -27,15 +23,7 @@ const ExploreArtworksDDDT = () => {
         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
       >
         <div className="py-1">
-          <MenuItem>
-            <a
-              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-              onClick={() => handleClick('/collections/metCollection')}
-            >
-              Metropolitan Museum of Art NY
-            </a>
-          </MenuItem>
-         <MenuItem>
+            <MenuItem>
             <a
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
               onClick={() => handleClick('/collections/chicagoCollection')}
@@ -48,7 +36,7 @@ const ExploreArtworksDDDT = () => {
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
               onClick={() => handleClick('/collections/clevelandCollection')}
             >
-              Cleveland Art Museum
+              Cleveland Museum of Art
             </a>
           </MenuItem>
         </div>

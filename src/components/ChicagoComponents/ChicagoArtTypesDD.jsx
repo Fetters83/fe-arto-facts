@@ -1,41 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchChicagoArtTypes } from '../../../api';
 
-const types = [
-    'Amulets','Apparatus','Arms and Armor',
-    'Basketry',	'Book Binding',	'Bound Volume',
-    'Calligraphy',	'Carpet',	'Ceramic',
-    'Coins','Cosmetic Objects',	'Drawing',
-    'Embroidery','Enamel','Forgery','Frame',
-    'Funerary Equipment','Furniture and woodwork',
-    'Garment','Glass','Glyptic','Illumination',
-    'Implements','Inlays', 'Ivory','Jade','Jewelry',
-    'Knitting','Lace','Lacquer','Leather','Linoleum Block',
-    'Lithographic Stone', 'Manuscript','Metalwork','Miniature',
-    'Miscellaneous','Mixed Media','Monotype','Mosaic',
-    'Musical Instrument','Netsuke','Painting','Papyri','Photograph',
-    'Plaque','Plate','Portfolio', 'Portrait Miniature','Print',
-    'Relief','Rock crystal','Rubbing','Sampler','Scarabs',
-    'Sculpture','Seals','Silver','Spindle Whorl','Stencil',
-    'Stone','Tapestry','Textile',,'Time-based Media','Tool',
-    'Velvet','Vessels','Wood','Woodblock'
-];
 
-const ClevelandArtTypes = ({ setFilterInputs,artTypeField,setArtTypeField,artTypeFieldError,setArtTypeFieldError,disabled }) => {
+
+const ChicagoArtTypes = ({ setFilterInputs,artTypeTitleFieldError,setArtTypeTitleFieldError,artTypeField,setArtTypeField,disabled }) => {
   const [inputValue, setInputValue] = useState('');
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [types, setTypes] = useState([])
 
+  useEffect(()=>{
+    const getChicagoArtTypes = async()=>{
+
+      try {
+        const chicagoArtTypesData = await fetchChicagoArtTypes()
+
+        setTypes(chicagoArtTypesData)
+      } catch (error) {
+        throw error
+      }
+    }
+    getChicagoArtTypes()
+  },[])
   const handleInputChange = (event) => {
     const query = event.target.value;
-    setArtTypeFieldError(false)
+    setArtTypeTitleFieldError(false)
     setInputValue(query);
     setArtTypeField(query)
 
     setFilterInputs((prev) => {
       const updatedFilters = { ...prev };
       if (!query.trim()) {
-        delete updatedFilters.type;
+        delete updatedFilters.artTypeTitle;
       } else {
-        updatedFilters.type = query.trim();
+        updatedFilters.artTypeTitle = query.trim();
       }
       return updatedFilters;
     });
@@ -45,7 +42,7 @@ const ClevelandArtTypes = ({ setFilterInputs,artTypeField,setArtTypeField,artTyp
       const filtered = types
         .filter((type) =>
           type.toLowerCase().includes(query.toLowerCase())
-        )
+        ) 
         .slice(0, 2);
       setFilteredSuggestions(filtered);
     } else {
@@ -58,7 +55,7 @@ const ClevelandArtTypes = ({ setFilterInputs,artTypeField,setArtTypeField,artTyp
     setArtTypeField(suggestion)
     setFilterInputs((prev) => ({
       ...prev,
-      type: suggestion,
+      artTypeTitle: suggestion,
     }));
     setFilteredSuggestions([]);
   };
@@ -73,13 +70,15 @@ const ClevelandArtTypes = ({ setFilterInputs,artTypeField,setArtTypeField,artTyp
               </label> 
       <input
         type="text"
-                value={artTypeField? artTypeField: ''}
+      
+      value={artTypeField? artTypeField: ''}
         onChange={handleInputChange}
         placeholder="Search by medium.."
     
-        className={`w-full p-2 border border-gray-300 rounded h-10 text-sm ${artTypeFieldError ? "border-red-500" : "border-gray-300"}`}
-        disabled={disabled}
-     />
+        className={`border px-3 py-2 rounded w-full h-10 md:w-auto text-sm 
+          ${artTypeTitleFieldError ? "border-red-500" : "border-gray-300"}`}
+      disabled={disabled}
+      />
       {filteredSuggestions.length > 0 && (
         <ul
 
@@ -97,9 +96,9 @@ const ClevelandArtTypes = ({ setFilterInputs,artTypeField,setArtTypeField,artTyp
           ))}
         </ul>
       )}
-      {artTypeFieldError && <p className="text-red-500 text-xs mt-1">Numbers are not allowed</p>}
+      {artTypeTitleFieldError && <p className="text-red-500 text-xs mt-1">Numbers are not allowed</p>}
     </section>
   );
 };
 
-export default ClevelandArtTypes;
+export default ChicagoArtTypes;

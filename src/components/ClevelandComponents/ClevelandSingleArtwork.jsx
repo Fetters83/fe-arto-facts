@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate,useLocation } from 'react-router-dom';
 import { useArtContext } from '../../contexts/ArtworkContext.jsx';
 import { fetchClevelandArtworkById } from '../../../api.js';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const ClevelandSingleArtWork = () => {
   const { id } = useParams(); 
@@ -10,12 +10,13 @@ const ClevelandSingleArtWork = () => {
   const location = useLocation();
   const selectedPage = location.state?.selectedPage || 0;
   const itemOffset = location.state?.itemOffset || 0;
-  const itemsPerPage = location.state?.itemsPerPage || 12;
+  const itemsPerPage = location.state?.itemsPerPage || 12; 
   const [artwork, setArtwork] = useState(null);
   const [error, setError] = useState(null);
   const { exhibitions, addArtworkToExhibition, createExhibition } = useArtContext();
   const [selectedExhibitionId, setSelectedExhibitionId] = useState('');
   const [newExhibitionName, setNewExhibitionName] = useState('');
+  console.log(location.state)
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -59,24 +60,45 @@ const ClevelandSingleArtWork = () => {
       alert('Please select or create an exhibition.');
     }
   };
-
+  const previousPage = location.state?.fromTemporaryExhibitions ? '/exhibitions' : '/collections/clevelandCollection';
   return (
     <section className="p-6">
  
       <button
-        onClick={() => navigate(`/collections/clevelandCollection`, { state: { selectedPage,itemOffset,itemsPerPage } })}
+        onClick={() => navigate(previousPage,{ state: location.state})}
         className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 mb-4"
       >
         Back
       </button>
 
-     
+   
       <section className="flex flex-col md:flex-row items-center md:items-start md:space-x-6">
-        <img
-          src={artwork.img}
-          alt={artwork.alt}
-          className="w-full md:w-1/2 object-cover mb-4 md:mb-0"
-        />
+
+      {artwork.img && artwork.img !== 'No Image' ? (
+ /*  <img
+    src={artwork.img}
+    alt={artwork.alt}
+    className="w-full md:w-1/2 object-cover mb-4 md:mb-0"
+  /> */
+  <LazyLoadImage
+  src={artwork.img}
+  alt={artwork.alt}
+  effect="blur"
+  wrapperProps={{
+    style: { transitionDelay: "1s" },
+  }}
+  className="w-full md:w-1/2 object-cover mb-4 md:mb-0"/>
+) : (
+  <a 
+    href={artwork.linkToWebSiteImg} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="w-full md:w-1/2 h-64 flex items-center justify-center bg-gray-200 text-center text-sm text-black font-bold p-4 hover:bg-gray-300 cursor-pointer"
+  >
+    No Image Available - Click Here To access the image for the Cleveland Art Museum Website
+  </a>
+)}
+         
         <section className="flex-1">
           <h1 className="text-3xl font-bold mb-4">{artwork.title}</h1>
           <p className="text-gray-700 mb-2">

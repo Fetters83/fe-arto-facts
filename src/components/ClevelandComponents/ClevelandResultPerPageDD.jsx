@@ -1,13 +1,23 @@
-const ClevelandResultsPerPageDD = ( {filterInputs ,setItemsPerPage})=>{
+const ClevelandResultsPerPageDD = ( {itemsPerPage,setItemsPerPage})=>{
     
+
+
+
+  const handleLimitChange = (e) =>{
+    const newLimit = parseInt(e.target.value,10)
+    setItemsPerPage(newLimit)
+
+  }
+
+
     return(
         <section className="flex flex-col items-center w-full md:w-auto">
    <label htmlFor="pages" className="text-sm font-bold mb-1 text-center">Results</label>
        <select
          id="pages"
-         value={filterInputs.limit}
-         onChange={(e) => /* handleFilterInputChange('limit', parseInt(e.target.value)) */ setItemsPerPage(parseInt(e.target.value,10))}
-         className="border px-3 py-2 rounded w-full h-10 text-sm md:w-auto"
+        value={itemsPerPage} 
+        onChange={handleLimitChange}
+            className="border px-3 py-2 rounded w-full h-10 text-sm md:w-auto"
        >
          {[12, 24, 48].map((limit) => (
            <option key={limit} value={limit}>
