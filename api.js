@@ -4,8 +4,16 @@ const BASE_URL = 'https://be-arto-facts.onrender.com/api/collections';
 
 
 export const fetchChicagoArtworks = async (filters) => {
+
+ try {
   const response = await axios.get(`${BASE_URL}/ArtInstituteChicago`, { params: filters });
+
   return response.data.ArtInstituteOfChicago || [];
+ } catch (error) {
+
+  throw error
+ }
+ 
 };
 
 
@@ -32,10 +40,10 @@ console.log(filters)
 
 
     const response = await axios.get(`${BASE_URL}/MetArtMuseum`, { params: filters });
-    console.log(response)
+ 
     return response.data.metArtWorks || [];
   } catch (error) {
-    console.log(error)
+
     throw error
   }
 
@@ -56,9 +64,9 @@ export const fetchMetDepartments = async () => {
 
 export const fetchClevelandArtworks = async(params) =>{
   try {
-    console.log(params)
+  
     const response = await axios.get(`${BASE_URL}/ClevelandArtMuseum`,{params})
-    console.log(response)
+
     const {clevelandArtPieces} = response.data
     /* console.log(clevelandArtPieces) */
     return clevelandArtPieces
@@ -82,4 +90,15 @@ export const fetchClevelandArtworkById = async (id)=>{
   }
 
 
+}
+
+export const fetchChicagoArtTypes = async ()=>{
+  try {
+    const response = await axios.get(`${BASE_URL}/ArtInstituteChicago/artworkTypes`)
+    const {ArtInstituteOfChicagoArtworkTypes} = response.data
+    
+    return ArtInstituteOfChicagoArtworkTypes
+  } catch (error) {
+    throw error
+  }
 }

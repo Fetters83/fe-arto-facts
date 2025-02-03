@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 const departments = [
     'All','African Art','American Painting and Sculpture','Art of the Americas','Chinese Art','Contemporary Art','Decorative Art and Design',
@@ -7,13 +7,19 @@ const departments = [
     'Photography','Prints','Textiles'
   ]
 
-  const ClevelandDepartmentsDD = ({ filterInputs, setFilterInputs }) => {
+  const ClevelandDepartmentsDD = ({ setFilterInputs,departmentField,setDepartmentField,departmentFieldError,setDepartmentFieldError,disabled }) => {
     const [inputValue, setInputValue] = useState('');
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+
+    useEffect(()=>{
+      setInputValue(departmentField || "");
+    },[departmentField])
   
     const handleInputChange = (event) => {
       const query = event.target.value;
+      setDepartmentFieldError(false)
       setInputValue(query);
+      setDepartmentField(query)
   
       setFilterInputs((prev) => {
         const updatedFilters = { ...prev };
@@ -40,6 +46,7 @@ const departments = [
   
     const handleSuggestionClick = (suggestion) => {
       setInputValue(suggestion); 
+      setDepartmentField(suggestion)
   
       setFilterInputs((prev) => {
         const updatedFilters = { ...prev };
@@ -58,21 +65,21 @@ const departments = [
       <section className="relative flex flex-col items-center w-full md:w-auto">
           <label
                 htmlFor="department"
-                className="text-sm text-center font-bold md:text-lg"
+                className="text-sm font-bold mb-1 text-center"
               >
                 Departments
               </label> 
         <input
           type="text"
-          value={inputValue}
+          value={inputValue} 
           onChange={handleInputChange}
           placeholder="Search by department.."
-          className="w-full p-2 border border-gray-300 rounded h-10 text-sm"
-
+          className={`w-full p-2 border border-gray-300 rounded h-10 text-sm ${departmentFieldError? "border-red-500" : "border-gray-300"}`}
+          disabled={disabled}
         />
         {filteredSuggestions.length > 0 && (
           <ul
-           className="absolute w-full mt-1 bg-white border border-gray-300 rounded shadow-md z-10"
+           className="absolute left-0 top-full mt-1 w-full bg-white border border-gray-300 rounded shadow-md z-10"
           >
             {filteredSuggestions.map((suggestion, index) => (
               <li
@@ -85,6 +92,7 @@ const departments = [
             ))}
           </ul>
         )}
+         {departmentFieldError && <p className="text-red-500 text-xs mt-1">Numbers are not allowed</p>}
       </section>
     );
   };

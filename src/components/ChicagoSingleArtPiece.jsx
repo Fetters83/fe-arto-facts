@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
-import { useArtContext } from '../contexts/ArtworkContext.jsx';
-import { fetchChicagoArtworkById } from '../../api.js';
+import { useArtContext } from "../contexts/ArtworkContext.jsx";
+import { fetchChicagoArtworkById } from "../../api.js";
+import DOMPurify from 'dompurify';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
 const ChicagoSingleArtPiece = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [artwork, setArtwork] = useState(null);
-  const [error, setError] = useState('');
-  const { exhibitions, addArtworkToExhibition, createExhibition } = useArtContext();
-  const [selectedExhibitionId, setSelectedExhibitionId] = useState('');
-  const [newExhibitionName, setNewExhibitionName] = useState('');
+  const [error, setError] = useState("");
+  const { exhibitions, addArtworkToExhibition, createExhibition } =
+    useArtContext();
+  const [selectedExhibitionId, setSelectedExhibitionId] = useState("");
+  const [newExhibitionName, setNewExhibitionName] = useState("");
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -19,72 +25,103 @@ const ChicagoSingleArtPiece = () => {
         setArtwork(data);
       } catch (err) {
         console.error(err);
-        setError('Could not fetch the artwork details.');
+        setError("Could not fetch the artwork details.");
       }
     };
     loadArtwork();
   }, [id]);
- 
 
+  console.log(location.state);
   const handleSaveArtwork = () => {
-  
     const artworkWithCollectionType = {
       ...artwork,
-      collectionType: 'ArtInstituteChicago', 
+      collectionType: "ArtInstituteChicago",
     };
   
     if (selectedExhibitionId) {
-
+      // If an exhibition is selected, add artwork directly
       addArtworkToExhibition(selectedExhibitionId, artworkWithCollectionType);
       alert(`Artwork saved to the exhibition!`);
     } else if (newExhibitionName.trim()) {
-    
+      // If creating a new exhibition, ensure message order is correct
       const newId = Date.now();
       createExhibition(newExhibitionName);
+  
       setTimeout(() => {
-        addArtworkToExhibition(newId, artworkWithCollectionType); 
+        addArtworkToExhibition(newId, artworkWithCollectionType);
         alert(`Artwork saved to new exhibition "${newExhibitionName}"!`);
-        setNewExhibitionName('');
+        setNewExhibitionName("");
       }, 0);
-      alert('Please select or create an exhibition.');
+    } else {
+      // **Only show this if no new name or existing selection exists**
+      alert("Please select or create an exhibition.");
     }
   };
 
+  const previousPage = location.state?.fromTemporaryExhibitions ? '/exhibitions' : '/collections/chicagoCollection';
+
   if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
+    return <section className="p-6 text-red-500">{error}</section>;
   }
 
   if (!artwork) {
-    return <div className="p-6 text-center">Loading...</div>;
+    return <section className="p-6 text-center">Loading...</section>;
   }
 
   return (
-    <div className="p-6">
-    
+    <section className="p-6">
       <button
-        onClick={() => navigate(-1)} 
+        onClick={() =>
+          navigate(previousPage, { state: location.state })
+        }
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4"
       >
         Back
       </button>
 
-     
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <img
-          src={artwork.img || artwork.smallImg}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {!imageError ? (
+         /*  <img
+            src={artwork.img || artwork.smallImg}
+            alt={artwork.alt}
+            className="w-full h-auto object-cover rounded shadow"
+            onError={() => setImageError(true)}
+          /> */
+          <LazyLoadImage
           alt={artwork.alt}
+          src={artwork.img || artwork.smallIng}
+          effect="blur"
+          wrapperProps={{
+            style: { transitionDelay: "1s" },
+          }}
           className="w-full h-auto object-cover rounded shadow"
-        />
-        <div>
+          onError={() => setImageError(true)}
+          />
+        ) : (
+          <a
+            href="https://www.artic.edu/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full h-auto flex items-center justify-center text-blue-500 text-lg underline bg-gray-200 p-4 rounded shadow text-center"
+          >
+            No Image Available - Click to Visit Art Institute of Chicago
+          </a>
+        )}
+        <section>
           <h1 className="text-2xl font-bold mb-4">{artwork.title}</h1>
           <p className="text-gray-600">
             <strong>Artist:</strong> {artwork.artist}
           </p>
           <p className="text-gray-600">
-            <strong>Date:</strong> {artwork.date}
+            <strong>Date:</strong>{" "}
+            {artwork.date < 0
+              ? `BC ${artwork.date * -1}`
+              : artwork.date > 0 && artwork.date <= 999
+              ? `AD ${artwork.date}`
+              : artwork.date}
           </p>
           <p className="text-gray-600">
-            <strong>Medium:</strong> {artwork.medium.join(', ')}
+            <strong>Medium:</strong> {artwork.medium.join(", ")}
           </p>
           <p className="text-gray-600">
             <strong>Classification:</strong> {artwork.classification}
@@ -99,12 +136,19 @@ const ChicagoSingleArtPiece = () => {
             <strong>Credited to:</strong> {artwork.creditedTo}
           </p>
           <p className="text-gray-600">
-            <strong>Description:</strong>{' '}
-            {artwork.description || 'No description available'}
+            <strong>Description:</strong>{" "}
+            {artwork.description ? (
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(artwork.description),
+                }}
+              />
+            ) : (
+              "No description available"
+            )}
           </p>
 
-          <div className="mt-6">
-           
+          <section className="mt-6">
             <select
               value={selectedExhibitionId}
               onChange={(e) => setSelectedExhibitionId(e.target.value)}
@@ -118,7 +162,6 @@ const ChicagoSingleArtPiece = () => {
               ))}
             </select>
 
-           
             <input
               type="text"
               placeholder="Or create a new exhibition"
@@ -133,10 +176,10 @@ const ChicagoSingleArtPiece = () => {
             >
               Save to Exhibition
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </section>
+        </section>
+      </section>
+    </section>
   );
 };
 
