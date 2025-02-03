@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily:{
-        body:['Nunito']
+        body:['Nunito'],
+        sans: ['Montserrat', 'sans-serif'],
       }
     },
   },
